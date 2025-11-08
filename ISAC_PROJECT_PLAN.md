@@ -86,18 +86,19 @@ Solution projects:
 
 Status:
 - [x] ~~`IsacApiOptions` (`BaseUrl`)~~ **[DEPRECATED]** No custom backend.
-- [ ] **[NEW]** `OpenAIRealtimeOptions` (API key, model selection)
-- [ ] **[NEW]** `CartesiaOptions` (API key, voice ID)
-- [x] DTOs: ~~`QueryRequest`, `QueryResponse`~~ **[REVISED]** for Bluetooth audio transfer.
-- [x] DTOs: `VoiceEnrollRequest`, `VoiceEnrollResponse` (now for Cartesia enrollment).
-- [ ] **[NEW]** Interface `IRealtimeClient` (OpenAI Realtime WebSocket wrapper)
-- [ ] **[NEW]** Interface `ICartesiaTTSClient` (Cartesia TTS API wrapper)
-- [ ] **[NEW]** DI extensions for OpenAI + Cartesia clients.
+- [x] **[NEW]** `OpenAIRealtimeOptions` (API key, model selection, voice)
+- [x] **[NEW]** `CartesiaOptions` (API key, voice ID, model)
+- [x] DTOs: `WatchAudioMessage`, `PhoneAudioResponse` for Bluetooth audio transfer.
+- [x] DTOs: `CartesiaVoiceEnrollRequest`, `CartesiaVoiceEnrollResponse` for Cartesia enrollment.
+- [x] **[NEW]** Interface `IRealtimeClient` (OpenAI Realtime WebSocket wrapper)
+- [x] **[NEW]** Interface `ICartesiaTTSClient` (Cartesia TTS API wrapper)
+- [x] **[NEW]** DI extensions `AddOpenAIRealtimeClient`, `AddCartesiaTTSClient`.
 
 ### Implementation Notes
 
 - All code must be platform neutral (no direct Android/iOS APIs).
-- Provide extension methods to register API clients in DI containers.
+- Provide extension methods to register API clients in DI containers. ✅ Implemented.
+- Client implementations will be added in `Isac.Mobile` project (platform-specific WebSocket/HTTP logic).
 
 ---
 
@@ -176,11 +177,13 @@ Status:
 
 ## Development Order (Recommended) Progress
 
-1. ~~Backend and Shared~~ **[REVISED]** Shared library + API client abstractions
-   - [ ] Implement OpenAI Realtime client abstraction in `Isac.Core.Shared`.
-   - [ ] Implement Cartesia TTS client abstraction in `Isac.Core.Shared`.
-   - [ ] Add DTOs for Bluetooth audio transfer (watch ↔ phone).
-2. Mobile App (Isac.Mobile) - **Now the core orchestrator**
+1. **Shared library + API client abstractions** ✅ **COMPLETE**
+   - [x] Implement OpenAI Realtime client abstraction in `Isac.Core.Shared`.
+   - [x] Implement Cartesia TTS client abstraction in `Isac.Core.Shared`.
+   - [x] Add DTOs for Bluetooth audio transfer (watch ↔ phone).
+   - [x] Add configuration options for OpenAI and Cartesia.
+   - [x] Add DI extension methods.
+2. Mobile App (Isac.Mobile) - **Now the core orchestrator** ⏳ **NEXT**
    - [ ] Integrate OpenAI Realtime SDK (WebSocket client).
    - [ ] Integrate Cartesia TTS SDK (HTTP client).
    - [ ] Implement Bluetooth communication with watch.
