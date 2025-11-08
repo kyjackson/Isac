@@ -159,8 +159,8 @@ Status:
 - [x] Simple digital face showing time and date.
 - [x] ISAC indicator element.
 - [x] Tap anywhere to launch `Isac.Wear.MainActivity` (with intent).
-- [ ] Ambient mode (not implemented).
-- [x] Battery-efficient (no heavy work; 1s timer only).
+- [x] Ambient mode (screen off/on simulation; minute updates in ambient).
+- [x] Battery-efficient (second updates active, minute in ambient).
 
 ---
 
@@ -196,7 +196,7 @@ Status:
 2. Wear App (Isac.Wear)
    - [x] Implement press-to-record, send to `/api/v1/query`, and play response; add Settings page.
 3. Watch Face (Isac.Watchface)
-   - [x] Implement basic digital face and tap-to-launch Wear app.
+   - [x] Implement digital face, tap-to-launch, and ambient mode.
 4. Mobile App (Isac.Mobile)
    - [x] Implemented Shell, Home (Ping), Settings (BaseUrl), and Enrollment (basic file-based flow). Recording UI pending.
 5. Iterative Enhancements
