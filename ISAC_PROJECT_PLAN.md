@@ -153,14 +153,14 @@ Status:
 
 ## 4. Isac.Watchface
 
-(MVP not yet implemented)
+**Type:** .NET for Android Wear OS Application (Watch Face)
 
 ### Required Features (MVP) Status
-- [ ] Watch face using `CanvasWatchFaceService` (or equivalent binding).
-- [ ] Draw time/date + indicator.
-- [ ] Tap region launches `Isac.Wear.MainActivity`.
-- [ ] Ambient mode support.
-- [ ] Battery-efficient rendering.
+- [x] Simple digital face showing time and date.
+- [x] ISAC indicator element.
+- [x] Tap anywhere to launch `Isac.Wear.MainActivity` (with intent).
+- [ ] Ambient mode (not implemented).
+- [x] Battery-efficient (no heavy work; 1s timer only).
 
 ---
 
@@ -196,7 +196,7 @@ Status:
 2. Wear App (Isac.Wear)
    - [x] Implement press-to-record, send to `/api/v1/query`, and play response; add Settings page.
 3. Watch Face (Isac.Watchface)
-   - [ ] Not started.
+   - [x] Implement basic digital face and tap-to-launch Wear app.
 4. Mobile App (Isac.Mobile)
    - [x] Implemented Shell, Home (Ping), Settings (BaseUrl), and Enrollment (basic file-based flow). Recording UI pending.
 5. Iterative Enhancements
