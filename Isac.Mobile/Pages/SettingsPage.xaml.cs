@@ -8,13 +8,19 @@ public partial class SettingsPage : ContentPage
     public SettingsPage()
     {
         InitializeComponent();
-        BaseUrlEntry.Text = Preferences.Get("Isac:Api:BaseUrl", string.Empty);
+        OpenAIKeyEntry.Text = Preferences.Get("OpenAI:ApiKey", string.Empty);
+        CartesiaKeyEntry.Text = Preferences.Get("Cartesia:ApiKey", string.Empty);
+        VoiceIdEntry.Text = Preferences.Get("Cartesia:VoiceId", string.Empty);
     }
 
     private void OnSaveClicked(object? sender, EventArgs e)
     {
-        var url = BaseUrlEntry.Text?.Trim() ?? string.Empty;
-        Preferences.Set("Isac:Api:BaseUrl", url);
-        StatusLabel.Text = "Saved.";
+        var openAIKey = OpenAIKeyEntry.Text?.Trim() ?? string.Empty;
+        var cartesiaKey = CartesiaKeyEntry.Text?.Trim() ?? string.Empty;
+
+        Preferences.Set("OpenAI:ApiKey", openAIKey);
+        Preferences.Set("Cartesia:ApiKey", cartesiaKey);
+        
+        StatusLabel.Text = "API keys saved.";
     }
 }

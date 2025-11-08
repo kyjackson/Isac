@@ -1,6 +1,5 @@
 using Isac.Core.Shared.Client;
 using Isac.Core.Shared.Transport;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage;
 
@@ -8,55 +7,89 @@ namespace Isac.Mobile.Pages;
 
 public partial class EnrollmentPage : ContentPage
 {
-    private readonly List<VoiceSampleDescriptor> _clips = new();
+    private readonly List<VoiceSampleDescriptor> _samples = new();
+    private readonly ICartesiaTTSClient _cartesiaClient;
 
-    public EnrollmentPage()
+    public EnrollmentPage(ICartesiaTTSClient cartesiaClient)
     {
         InitializeComponent();
+        _cartesiaClient = cartesiaClient;
     }
 
     private async void OnRecordClicked(object? sender, EventArgs e)
     {
-        var file = await FilePicker.Default.PickAsync(new PickOptions
+        try
         {
-            PickerTitle = "Select an audio file"
-        });
-        if (file is null) return;
-        using var stream = await file.OpenReadAsync();
-        using var ms = new MemoryStream();
-        await stream.CopyToAsync(ms);
-        _clips.Add(new VoiceSampleDescriptor(file.FileName, "audio/wav", ms.ToArray()));
-        StatusLabel.Text = $"Clips: {_clips.Count}";
+            // For MVP: use file picker to select audio samples
+            // TODO: Replace with actual audio recording using platform-specific APIs
+            var file = await FilePicker.Default.PickAsync(new PickOptions
+            {
+                PickerTitle = "Select an audio sample (WAV or MP3)"
+            });
+
+            if (file is null) return;
+
+            using var stream = await file.OpenReadAsync();
+            using var ms = new MemoryStream();
+            await stream.CopyToAsync(ms);
+
+            var sample = new VoiceSampleDescriptor(
+                file.FileName,
+                file.ContentType ?? "audio/wav",
+                ms.ToArray()
+            );
+
+            _samples.Add(sample);
+            SamplesLabel.Text = $"Samples recorded: {_samples.Count}";
+            UploadButton.IsEnabled = _samples.Count >= 3;
+            StatusLabel.Text = $"Added sample: {file.FileName}";
+        }
+        catch (Exception ex)
+        {
+            StatusLabel.Text = $"Error: {ex.Message}";
+        }
     }
 
     private async void OnUploadClicked(object? sender, EventArgs e)
     {
-        var baseUrl = Preferences.Get("Isac:Api:BaseUrl", string.Empty);
-        if (string.IsNullOrWhiteSpace(baseUrl))
+        var cartesiaKey = Preferences.Get("Cartesia:ApiKey", string.Empty);
+        if (string.IsNullOrWhiteSpace(cartesiaKey))
         {
-            StatusLabel.Text = "Set API Base URL in Settings.";
-            return;
-        }
-        if (_clips.Count == 0)
-        {
-            StatusLabel.Text = "Add at least one clip.";
+            StatusLabel.Text = "Set Cartesia API Key in Settings first.";
             return;
         }
 
-        var services = new ServiceCollection();
-        services.AddIsacClient(o => o.BaseUrl = baseUrl);
-        using var provider = services.BuildServiceProvider();
-        var client = provider.GetRequiredService<IIsacClient>();
+        if (_samples.Count < 3)
+        {
+            StatusLabel.Text = "Record at least 3 samples.";
+            return;
+        }
 
-        StatusLabel.Text = "Uploading...";
+        StatusLabel.Text = "Uploading to Cartesia...";
+        UploadButton.IsEnabled = false;
+
         try
         {
-            var resp = await client.EnrollVoiceAsync(new VoiceEnrollRequest("demo-user", _clips));
-            StatusLabel.Text = $"Enrolled: {resp.VoiceProfileId}";
+            var voiceId = await _cartesiaClient.CreateVoiceAsync(_samples, "ISAC_User_Voice");
+            Preferences.Set("Cartesia:VoiceId", voiceId);
+            StatusLabel.Text = $"Voice created! ID: {voiceId}";
+
+            // Clear samples after successful upload
+            _samples.Clear();
+            SamplesLabel.Text = "Samples recorded: 0";
         }
         catch (Exception ex)
         {
-            StatusLabel.Text = ex.Message;
+            StatusLabel.Text = $"Upload failed: {ex.Message}";
+            UploadButton.IsEnabled = true;
         }
+    }
+
+    private void OnClearClicked(object? sender, EventArgs e)
+    {
+        _samples.Clear();
+        SamplesLabel.Text = "Samples recorded: 0";
+        UploadButton.IsEnabled = false;
+        StatusLabel.Text = "Samples cleared.";
     }
 }

@@ -3,10 +3,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Isac.Mobile.Pages.SettingsPage"
              Title="Settings">
-    <VerticalStackLayout Padding="24" Spacing="16">
-        <Label Text="API Base URL" />
-        <Entry x:Name="BaseUrlEntry" Placeholder="https://..." />
-        <Button Text="Save" Clicked="OnSaveClicked" />
-        <Label x:Name="StatusLabel" TextColor="Gray" />
-    </VerticalStackLayout>
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="16">
+            <Label Text="API Configuration" FontSize="20" FontAttributes="Bold" />
+            
+            <Label Text="OpenAI API Key" />
+            <Entry x:Name="OpenAIKeyEntry" Placeholder="sk-..." IsPassword="True" />
+            
+            <Label Text="Cartesia API Key" />
+            <Entry x:Name="CartesiaKeyEntry" Placeholder="cart-..." IsPassword="True" />
+            
+            <Label Text="Cartesia Voice ID (from enrollment)" />
+            <Entry x:Name="VoiceIdEntry" Placeholder="voice-id-..." IsReadOnly="True" />
+            
+            <Button Text="Save API Keys" Clicked="OnSaveClicked" />
+            <Label x:Name="StatusLabel" TextColor="Gray" />
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

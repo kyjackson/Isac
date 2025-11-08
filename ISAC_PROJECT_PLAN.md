@@ -98,7 +98,7 @@ Status:
 
 - All code must be platform neutral (no direct Android/iOS APIs).
 - Provide extension methods to register API clients in DI containers. ✅ Implemented.
-- Client implementations will be added in `Isac.Mobile` project (platform-specific WebSocket/HTTP logic).
+- Client implementations added in `Isac.Mobile` project (WebSocket/HTTP logic). ✅ Implemented.
 
 ---
 
@@ -146,21 +146,21 @@ Status:
 ### Required Features (MVP) Status
 - [x] Shell navigation (Home / Status, Enrollment, Settings).
 - [ ] **[NEW]** Bluetooth communication with watch (Wear OS companion API or Data Layer).
-- [ ] **[NEW]** OpenAI Realtime API integration:
-  - WebSocket client for audio input/text output.
-  - Handle audio streaming from watch → Realtime API.
-  - Parse text response from LLM.
-- [ ] **[NEW]** Cartesia TTS API integration:
-  - Send text response + voice ID → receive cloned audio.
-  - Stream audio back to watch.
-- [ ] **[REVISED]** Voice enrollment UI:
-  - Record user's voice (multiple samples).
-  - Upload to Cartesia API to create custom voice.
-  - Store voice ID in app preferences.
-- [ ] **[NEW]** Settings page:
-  - Enter OpenAI API key.
-  - Enter Cartesia API key.
-  - Manage enrolled voice (re-record, delete).
+- [x] **[NEW]** OpenAI Realtime API integration:
+  - WebSocket client for audio input/text output. ✅ Implemented
+  - Handle audio streaming from watch → Realtime API. ⏳ Pending Bluetooth
+  - Parse text response from LLM. ✅ Implemented
+- [x] **[NEW]** Cartesia TTS API integration:
+  - Send text response + voice ID → receive cloned audio. ✅ Implemented
+  - Stream audio back to watch. ⏳ Pending Bluetooth
+- [x] **[REVISED]** Voice enrollment UI:
+  - Record user's voice (multiple samples). ✅ File picker placeholder
+  - Upload to Cartesia API to create custom voice. ✅ Implemented
+  - Store voice ID in app preferences. ✅ Implemented
+- [x] **[NEW]** Settings page:
+  - Enter OpenAI API key. ✅ Implemented
+  - Enter Cartesia API key. ✅ Implemented
+  - Display enrolled voice ID. ✅ Implemented
 - [ ] **[REMOVED]** ~~Test Connection button (Ping)~~ No custom backend to ping.
 
 ---
@@ -183,12 +183,12 @@ Status:
    - [x] Add DTOs for Bluetooth audio transfer (watch ↔ phone).
    - [x] Add configuration options for OpenAI and Cartesia.
    - [x] Add DI extension methods.
-2. Mobile App (Isac.Mobile) - **Now the core orchestrator** ⏳ **NEXT**
-   - [ ] Integrate OpenAI Realtime SDK (WebSocket client).
-   - [ ] Integrate Cartesia TTS SDK (HTTP client).
-   - [ ] Implement Bluetooth communication with watch.
-   - [ ] Build voice enrollment flow (record → upload to Cartesia).
-   - [ ] Implement end-to-end flow: audio in → Realtime → Cartesia → audio out.
+2. Mobile App (Isac.Mobile) - **Core orchestrator** ⏳ **IN PROGRESS**
+   - [x] Integrate OpenAI Realtime SDK (WebSocket client). ✅
+   - [x] Integrate Cartesia TTS SDK (HTTP client). ✅
+   - [ ] Implement Bluetooth communication with watch. ⏳ NEXT
+   - [x] Build voice enrollment flow (record → upload to Cartesia). ✅
+   - [ ] Implement end-to-end flow: audio in → Realtime → Cartesia → audio out. ⏳ Pending Bluetooth
 3. Wear App (Isac.Wear)
    - [ ] Update to send audio to phone via Bluetooth (Data Layer API).
    - [ ] Update to receive audio from phone and play.

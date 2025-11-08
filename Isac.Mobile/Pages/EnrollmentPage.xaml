@@ -3,10 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Isac.Mobile.Pages.EnrollmentPage"
              Title="Voice Enrollment">
-    <VerticalStackLayout Padding="24" Spacing="16">
-        <Label Text="Record 3-5 short clips for your voice profile." />
-        <Button Text="Record Clip" Clicked="OnRecordClicked" />
-        <Button Text="Upload Clips" Clicked="OnUploadClicked" />
-        <Label x:Name="StatusLabel" TextColor="Gray"/>
-    </VerticalStackLayout>
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="16">
+            <Label Text="Create your custom voice profile by recording 3-5 short samples (each 5-10 seconds)." TextColor="Gray" />
+            
+            <Button Text="Record Sample" Clicked="OnRecordClicked" x:Name="RecordButton" />
+            <Label x:Name="SamplesLabel" Text="Samples recorded: 0" />
+            
+            <Button Text="Upload and Create Voice" Clicked="OnUploadClicked" IsEnabled="False" x:Name="UploadButton" />
+            <Button Text="Clear Samples" Clicked="OnClearClicked" />
+            
+            <Label x:Name="StatusLabel" TextColor="Gray"/>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
