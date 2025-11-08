@@ -1,0 +1,12 @@
+<Solution>
+  <Project Path="Isac.Core.Api/Isac.Core.Api.csproj" />
+  <Project Path="Isac.Core.Shared/Isac.Core.Shared.csproj" />
+  <Project Path="Isac.Mobile/Isac.Mobile.csproj" />
+  <Project Path="Isac.Tests/Isac.Tests.csproj" />
+  <Project Path="Isac.Watchface/Isac.Watchface.csproj">
+    <Deploy />
+  </Project>
+  <Project Path="Isac.Wear/Isac.Wear.csproj">
+    <Deploy />
+  </Project>
+</Solution>
