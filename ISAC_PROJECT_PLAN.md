@@ -121,7 +121,7 @@ Status:
   - Registered users (NOT DONE)
   - Voice profiles (DONE) → partially complete overall.
 - [x] Implement `Ping` endpoint to be used by clients for connectivity checks.
-- [ ] Add structured logging for all API calls (basic logging service added, per-endpoint structured logging still TODO).
+- [x] Add structured logging for all API calls using Serilog with console sink and timings.
 - [x] Ensure CORS configuration is suitable for mobile/watch clients ( permissive policy added ).
 
 ### Future Tasks (placeholders)
@@ -136,16 +136,18 @@ Status:
 
 ## 3. Isac.Wear
 
-(MVP not yet implemented)
+**Type:** .NET for Android Wear OS Application  
+**Purpose:** Main interactive ISAC app on the watch.
 
 ### Required Features (MVP) Status
-- [ ] Main `Activity` with UI logic.
-- [ ] Runtime `RECORD_AUDIO` permission handling.
-- [ ] Press-and-hold recording interaction.
-- [ ] Audio capture via `AudioRecord` (16k/24kHz mono PCM16).
-- [ ] Send audio to `/api/v1/query` via `IsacHttpClient`.
-- [ ] Play response audio.
-- [ ] Status UI states.
+- [x] Main `Activity` with simple UI (hold-to-speak and status).
+- [x] Runtime `RECORD_AUDIO` permission handling.
+- [x] Press-and-hold recording interaction.
+- [x] Audio capture via `AudioRecord` (16kHz mono PCM16).
+- [x] Package audio and send to `/api/v1/query` via `IsacHttpClient`.
+- [x] Receive reply `AudioBytes` and play using `AudioTrack`.
+- [x] Display minimal status UI (Listening/Sending/Playing/Idle).
+- [x] Settings screen to configure API base URL (stored in Wear shared preferences).
 
 ---
 
@@ -192,7 +194,7 @@ Status:
    - [x] Implement `Isac.Core.Api` with `/api/v1/ping` and stub `/api/v1/query`.
    - [x] Add basic tests in `Isac.Tests` (partial set; more remaining).
 2. Wear App (Isac.Wear)
-   - [ ] Not started.
+   - [x] Implement press-to-record, send to `/api/v1/query`, and play response; add Settings page.
 3. Watch Face (Isac.Watchface)
    - [ ] Not started.
 4. Mobile App (Isac.Mobile)
@@ -207,7 +209,7 @@ Status:
 - Use `async`/`await` for all I/O operations. (Applied where implemented.)
 - Centralize HTTP configuration in `Isac.Core.Shared`. (In place.)
 - Avoid duplicating endpoint URLs or DTOs across projects. (Maintained.)
-- Fail fast and log meaningful errors in `Isac.Core.Api`. (Logging enhancement pending.)
+- Fail fast and log meaningful errors in `Isac.Core.Api`. (Serilog added; more enrichers/sinks can be configured.)
 - Keep platform-specific code isolated. (Current code respects this.)
 
 ---

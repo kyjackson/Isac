@@ -1,4 +1,15 @@
+using Serilog;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Serilog configuration
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 builder.Services.AddCors(o => o.AddPolicy("default", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
@@ -15,39 +26,64 @@ app.UseCors("default");
 app.UseHttpsRedirection();
 
 // Ping endpoint
-app.MapGet("/api/v1/ping", () => Results.Json(new { status = "ok", time = DateTimeOffset.UtcNow }))
-    .WithName("Ping");
+app.MapGet("/api/v1/ping", (HttpContext ctx) =>
+{
+    Log.Information("Ping requested from {RemoteIp}", ctx.Connection.RemoteIpAddress?.ToString());
+    return Results.Json(new { status = "ok", time = DateTimeOffset.UtcNow });
+})
+.WithName("Ping");
 
 // Query endpoint (multipart/form-data)
 app.MapPost("/api/v1/query", async (HttpRequest request) =>
 {
-    if (!request.HasFormContentType) return Results.BadRequest("Expected multipart/form-data");
-    var form = await request.ReadFormAsync();
-    var userId = form["userId"].ToString();
-    var deviceId = form["deviceId"].ToString();
-    var file = form.Files.GetFile("audio");
-    if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(deviceId) || file is null)
+    var sw = System.Diagnostics.Stopwatch.StartNew();
+    try
     {
-        return Results.BadRequest("Missing userId/deviceId/audio");
-    }
+        if (!request.HasFormContentType) return Results.BadRequest("Expected multipart/form-data");
+        var form = await request.ReadFormAsync();
+        var userId = form["userId"].ToString();
+        var deviceId = form["deviceId"].ToString();
+        var file = form.Files.GetFile("audio");
+        if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(deviceId) || file is null)
+        {
+            Log.Warning("Query invalid payload: userId={UserId}, deviceId={DeviceId}, hasFile={HasFile}", userId, deviceId, file != null);
+            return Results.BadRequest("Missing userId/deviceId/audio");
+        }
+        Log.Information("Query received: user={UserId}, device={DeviceId}, size={Size}", userId, deviceId, file.Length);
 
-    // Stub: ignore actual audio, return a small WAV placeholder
-    byte[] wavBytes = GenerateSilenceWav(seconds:1, sampleRate:16000);
-    var response = new Isac.Core.Shared.Transport.QueryResponse(
-        AudioFormat: "audio/wav",
-        AudioBytes: wavBytes,
-        Text: "stub"
-    );
-    return Results.Json(response);
+        // Stub: ignore actual audio, return a small WAV placeholder
+        byte[] wavBytes = GenerateSilenceWav(seconds:1, sampleRate:16000);
+        var response = new Isac.Core.Shared.Transport.QueryResponse(
+            AudioFormat: "audio/wav",
+            AudioBytes: wavBytes,
+            Text: "stub"
+        );
+        return Results.Json(response);
+    }
+    catch (Exception ex)
+    {
+        Log.Error(ex, "Query processing failed");
+        return Results.Problem("Internal error");
+    }
+    finally
+    {
+        sw.Stop();
+        Log.Information("Query handled in {ElapsedMs} ms", sw.ElapsedMilliseconds);
+    }
 });
 
 // Voice enroll endpoint
-app.MapPost("/api/v1/voice/enroll", async (Isac.Core.Shared.Transport.VoiceEnrollRequest enrollRequest) =>
+app.MapPost("/api/v1/voice/enroll", (Isac.Core.Shared.Transport.VoiceEnrollRequest enrollRequest) =>
 {
-    if (string.IsNullOrWhiteSpace(enrollRequest.UserId)) return Results.BadRequest("Missing userId");
+    if (string.IsNullOrWhiteSpace(enrollRequest.UserId))
+    {
+        Log.Warning("Enroll missing userId");
+        return Results.BadRequest("Missing userId");
+    }
     // Stub: generate dummy profile id
     var profileId = Guid.NewGuid().ToString("N");
     voiceProfiles[enrollRequest.UserId] = profileId;
+    Log.Information("Voice enrolled for user {UserId} -> {ProfileId}", enrollRequest.UserId, profileId);
     var resp = new Isac.Core.Shared.Transport.VoiceEnrollResponse(profileId);
     return Results.Json(resp);
 });
@@ -55,7 +91,8 @@ app.MapPost("/api/v1/voice/enroll", async (Isac.Core.Shared.Transport.VoiceEnrol
 // Voice delete endpoint
 app.MapDelete("/api/v1/voice", (string userId) =>
 {
-    voiceProfiles.Remove(userId);
+    var removed = voiceProfiles.Remove(userId);
+    Log.Information("Voice delete user {UserId}, removed={Removed}", userId, removed);
     return Results.NoContent();
 });
 
