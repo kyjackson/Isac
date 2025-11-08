@@ -85,42 +85,18 @@ No project should reference another app project (e.g. `Isac.Wear` must not refer
 
 ### Key Components (to implement)
 
-- `Isac.Core.Shared.Configuration`
-  - `IsacApiOptions`
-    - `BaseUrl` (string)
-- `Isac.Core.Shared.Transport`
-  - DTOs:
-    - `QueryRequest`
-      - `UserId` (string)
-      - `DeviceId` (string)
-      - `AudioFormat` (string, e.g. `"audio/wav"`)
-      - `Payload` (byte[] or stream in specific usages)
-    - `QueryResponse`
-      - `AudioFormat` (string)
-      - `AudioBytes` (byte[])
-      - (Optionally) `Text` (string, for debugging)
-    - `VoiceEnrollRequest`
-      - `UserId` (string)
-      - `Clips` (collection of `VoiceSampleDescriptor`)
-    - `VoiceEnrollResponse`
-      - `VoiceProfileId` (string)
-    - `VoiceDeleteRequest`
-      - `UserId` (string)
-- `Isac.Core.Shared.Client`
-  - `IIsacClient`
-    - `Task<QueryResponse> SendQueryAsync(QueryRequest request, CancellationToken ct = default);`
-    - `Task<VoiceEnrollResponse> EnrollVoiceAsync(VoiceEnrollRequest request, CancellationToken ct = default);`
-    - `Task DeleteVoiceAsync(string userId, CancellationToken ct = default);`
-    - `Task<bool> PingAsync(CancellationToken ct = default);`
-  - `IsacHttpClient` (default implementation)
-    - Uses `HttpClient` (injected or provided).
-    - Serializes/deserializes DTOs using `System.Text.Json`.
-    - Handles base URL, error handling, and basic retries.
+Status:
+- [x] `IsacApiOptions` (`BaseUrl`)
+- [x] DTOs: `QueryRequest`, `QueryResponse`, `VoiceEnrollRequest`, `VoiceEnrollResponse`, `VoiceDeleteRequest`, `VoiceSampleDescriptor`
+- [x] Interface `IIsacClient`
+- [x] Implementation `IsacHttpClient`
+- [x] DI extension `AddIsacClient`
+- [ ] Additional shared constants / route name centralization (not yet added)
 
 ### Implementation Notes
 
 - All code must be platform neutral (no direct Android/iOS APIs).
-- Provide extension methods to register `IIsacClient` in DI containers.
+- Provide extension methods to register `IIsacClient` in DI containers. (Implemented)
 
 ---
 
@@ -129,48 +105,24 @@ No project should reference another app project (e.g. `Isac.Wear` must not refer
 **Type:** ASP.NET Core Web API (.NET 10)  
 **Purpose:** Central “ISAC Core” backend.
 
-### Responsibilities
-
-- Expose HTTP endpoints for:
-  - Health/ping.
-  - Handling voice queries.
-  - Voice enrollment and deletion.
-- Integrate with:
-  - Automatic Speech Recognition (ASR).
-  - Large Language Model (LLM).
-  - Text-to-Speech (TTS) with voice cloning.
-- Enforce per-user isolation and basic authentication (to be implemented).
-
 ### Required Endpoints (initial)
 
-1. `GET /api/v1/ping`
-   - Returns simple status JSON.
-2. `POST /api/v1/query`
-   - Accepts audio input.
-   - For initial implementation:
-     - Accept input as `multipart/form-data` with:
-       - `userId`
-       - `deviceId`
-       - `audio` (file)
-     - Returns:
-       - For MVP: static or generated WAV as placeholder.
-3. `POST /api/v1/voice/enroll`
-   - Accepts multiple audio samples.
-   - MVP: store metadata only, return dummy `VoiceProfileId`.
-4. `DELETE /api/v1/voice`
-   - Removes stored voice profile and related data (MVP can be a stub).
+1. `GET /api/v1/ping` (Implemented) ✅
+2. `POST /api/v1/query` (Stub implemented: returns silence WAV) ✅
+3. `POST /api/v1/voice/enroll` (Stub implemented) ✅
+4. `DELETE /api/v1/voice` (Stub implemented) ✅
 
 ### Implementation Tasks
 
-- [ ] Create minimal hosting setup (`Program.cs`) using top-level statements.
-- [ ] Register controllers or minimal APIs for the routes above.
-- [ ] Use DTOs from `Isac.Core.Shared`.
+- [x] Create minimal hosting setup (`Program.cs`) using top-level statements.
+- [x] Register minimal APIs for the routes above. (Controllers not used.)
+- [x] Use DTOs from `Isac.Core.Shared`.
 - [ ] Implement a simple in-memory store for:
-  - Registered users.
-  - Voice profiles (stub implementation).
-- [ ] Implement `Ping` endpoint to be used by clients for connectivity checks.
-- [ ] Add structured logging for all API calls.
-- [ ] Ensure CORS configuration is suitable for mobile/watch clients.
+  - Registered users (NOT DONE)
+  - Voice profiles (DONE) → partially complete overall.
+- [x] Implement `Ping` endpoint to be used by clients for connectivity checks.
+- [ ] Add structured logging for all API calls (basic logging service added, per-endpoint structured logging still TODO).
+- [x] Ensure CORS configuration is suitable for mobile/watch clients ( permissive policy added ).
 
 ### Future Tasks (placeholders)
 
@@ -184,173 +136,79 @@ No project should reference another app project (e.g. `Isac.Wear` must not refer
 
 ## 3. Isac.Wear
 
-**Type:** .NET for Android Wear OS Application  
-**Purpose:** Main interactive ISAC app on the watch.
+(MVP not yet implemented)
 
-### Responsibilities
-
-- Provide a simple UI to:
-  - Start and stop voice capture.
-  - Send recorded audio to `Isac.Core.Api`.
-  - Play back response audio.
-- Use `Isac.Core.Shared` for DTOs and API calls.
-- Handle permissions (audio, network).
-- Optimize for short, low-friction interactions.
-
-### Required Features (MVP)
-
-- [ ] Single main `Activity` (e.g. `MainActivity`).
-- [ ] Request `RECORD_AUDIO` permission at runtime.
-- [ ] Large central control:
-  - Press-and-hold: start recording.
-  - Release: stop recording, send to backend.
-- [ ] Record audio using `AudioRecord`:
-  - Mono, 16kHz or 24kHz, PCM 16-bit.
-- [ ] Package audio and send to `/api/v1/query` via `IsacHttpClient`.
-- [ ] Receive reply `AudioBytes` and play using `MediaPlayer` or `AudioTrack`.
-- [ ] Display minimal status UI:
-  - “Listening…”
-  - “Sending…”
-  - “Playing response…”
-  - Error messages for connectivity issues.
-
-### Implementation Notes
-
-- Use only C# and .NET for Android bindings for audio and networking APIs.
-- No heavy logic or model inference on-device; delegate to backend.
-- Use configuration (e.g. embedded settings or simple local storage) for API base URL.
-- Design with Wear OS screen constraints in mind (circular UI).
+### Required Features (MVP) Status
+- [ ] Main `Activity` with UI logic.
+- [ ] Runtime `RECORD_AUDIO` permission handling.
+- [ ] Press-and-hold recording interaction.
+- [ ] Audio capture via `AudioRecord` (16k/24kHz mono PCM16).
+- [ ] Send audio to `/api/v1/query` via `IsacHttpClient`.
+- [ ] Play response audio.
+- [ ] Status UI states.
 
 ---
 
 ## 4. Isac.Watchface
 
-**Type:** .NET for Android Wear OS Application (Watch Face)  
-**Purpose:** Custom ISAC-style watch face that integrates with `Isac.Wear`.
+(MVP not yet implemented)
 
-### Responsibilities
-
-- Render a watch face visually inspired by ISAC HUD:
-  - Time, date, and status indicators.
-- Support tap actions:
-  - On a defined region (e.g. center ring/logo), launch `Isac.Wear` directly.
-- Optionally display complication data in the future.
-
-### Required Features (MVP)
-
-- [ ] Implement a watch face using `CanvasWatchFaceService` (or equivalent) in C#.
-- [ ] Draw a simple digital face:
-  - Time (hours/minutes, 24h or 12h).
-  - Date.
-  - One ISAC indicator element.
-- [ ] Handle tap events:
-  - On tap in the designated region:
-    - Start `Isac.Wear.MainActivity` with an intent.
-- [ ] Support ambient mode (reduced rendering).
-- [ ] Ensure battery-efficient drawing; no continuous heavy work.
-
-### Implementation Notes
-
-- The watch face must not execute heavy network or LLM logic.
-- It may read lightweight state (later) via shared preferences or simple APIs if needed.
-- Reuse shared constants/theme from `Isac.Core.Shared` where appropriate.
+### Required Features (MVP) Status
+- [ ] Watch face using `CanvasWatchFaceService` (or equivalent binding).
+- [ ] Draw time/date + indicator.
+- [ ] Tap region launches `Isac.Wear.MainActivity`.
+- [ ] Ambient mode support.
+- [ ] Battery-efficient rendering.
 
 ---
 
 ## 5. Isac.Mobile
 
-**Type:** .NET MAUI App  
-**Purpose:** Companion/control app for phone and desktop platforms.
+(MVP not yet implemented beyond template)
 
-### Responsibilities
-
-- Manage user configuration:
-  - API base URL.
-  - User identity / auth tokens (once implemented).
-- Handle voice enrollment flows:
-  - Guide the user through recording training samples.
-  - Upload enrollment samples to `Isac.Core.Api`.
-- Provide debugging/advanced controls:
-  - Connectivity tests to backend.
-  - View logs or recent interactions (future).
-
-### Required Features (MVP)
-
-- [ ] MAUI Shell-based app structure with a simple navigation:
-  - Home / Status page.
-  - Voice Enrollment page.
-  - Settings page.
-- [ ] Integrate `IsacHttpClient` from `Isac.Core.Shared`.
-- [ ] Implement “Test Connection” button:
-  - Calls `/api/v1/ping` and shows result.
-- [ ] Implement basic voice enrollment UI:
-  - Record multiple clips using MAUI/Android APIs.
-  - Display progress and send to `/api/v1/voice/enroll`.
-
-### Implementation Notes
-
-- Keep UI simple and functional.
-- All network calls should use the same DTOs and client as other projects.
-- No direct dependency on watch projects.
+### Required Features (MVP) Status
+- [ ] Shell navigation (Home / Status, Enrollment, Settings).
+- [ ] Integrate `IsacHttpClient` (not wired yet).
+- [ ] Test Connection button (Ping).
+- [ ] Voice enrollment UI & upload flow.
 
 ---
 
 ## 6. Isac.Tests
 
-**Type:** Test Project (e.g. xUnit)  
-**Purpose:** Automated tests for shared logic and backend.
-
-### Responsibilities
-
-- Validate DTO serialization/deserialization.
-- Validate `IsacHttpClient` behavior against a test server or mocked handlers.
-- Validate `Isac.Core.Api` endpoints using in-memory test host.
-
-### Required Tests (Initial)
-
-- [ ] `PingEndpoint_ReturnsSuccess`.
-- [ ] `QueryEndpoint_ReturnsAudio_ForValidInput` (using stubbed implementation).
-- [ ] `EnrollVoice_StoresProfileStub`.
-- [ ] Serialization tests for all DTOs in `Isac.Core.Shared`.
-- [ ] Basic error handling tests for `IsacHttpClient`.
+### Required Tests (Initial) Status
+- [x] `PingEndpoint_ReturnsSuccess` (integration-style TestServer ping test)
+- [ ] `QueryEndpoint_ReturnsAudio_ForValidInput`
+- [ ] `EnrollVoice_StoresProfileStub`
+- [x] Serialization tests for DTOs
+- [x] Basic error handling tests for `IsacHttpClient` (network failure case)
 
 ---
 
-## Development Order (Recommended)
+## Development Order (Recommended) Progress
 
-1. **Backend and Shared**
-   - Implement `Isac.Core.Shared` DTOs and `IsacHttpClient`.
-   - Implement `Isac.Core.Api` with `/api/v1/ping` and a stub `/api/v1/query`.
-   - Add basic tests in `Isac.Tests`.
-
-2. **Wear App (Isac.Wear)**
-   - Implement press-to-record, send to `/api/v1/query`, and play static/stub response.
-   - Confirm end-to-end flow: watch → API → watch.
-
-3. **Watch Face (Isac.Watchface)**
-   - Implement basic watch face drawing.
-   - Implement tap-to-launch `Isac.Wear`.
-
-4. **Mobile App (Isac.Mobile)**
-   - Implement settings and ping test.
-   - Implement basic voice enrollment UI wired to `/api/v1/voice/enroll`.
-
-5. **Iterative Enhancements**
-   - Replace stub responses with real ASR + LLM + TTS integrations.
-   - Add authentication, persistence, and richer UX.
+1. Backend and Shared
+   - [x] Implement `Isac.Core.Shared` DTOs and `IsacHttpClient`.
+   - [x] Implement `Isac.Core.Api` with `/api/v1/ping` and stub `/api/v1/query`.
+   - [x] Add basic tests in `Isac.Tests` (partial set; more remaining).
+2. Wear App (Isac.Wear)
+   - [ ] Not started.
+3. Watch Face (Isac.Watchface)
+   - [ ] Not started.
+4. Mobile App (Isac.Mobile)
+   - [ ] Not started (beyond template scaffolding).
+5. Iterative Enhancements
+   - [ ] Not started.
 
 ---
 
 ## Coding Style & Guidelines
 
-- Use `async`/`await` for all I/O operations.
-- Centralize HTTP configuration in `Isac.Core.Shared`.
-- Avoid duplicating endpoint URLs or DTOs across projects.
-- Fail fast and log meaningful errors in `Isac.Core.Api`.
-- Keep platform-specific code isolated to:
-  - `Isac.Wear` (Wear OS specifics)
-  - `Isac.Watchface` (watch face rendering)
-  - `Isac.Mobile` (MAUI specifics)
+- Use `async`/`await` for all I/O operations. (Applied where implemented.)
+- Centralize HTTP configuration in `Isac.Core.Shared`. (In place.)
+- Avoid duplicating endpoint URLs or DTOs across projects. (Maintained.)
+- Fail fast and log meaningful errors in `Isac.Core.Api`. (Logging enhancement pending.)
+- Keep platform-specific code isolated. (Current code respects this.)
 
 ---
 
