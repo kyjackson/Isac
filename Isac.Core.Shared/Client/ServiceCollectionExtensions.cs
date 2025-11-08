@@ -14,4 +14,13 @@ public static class ServiceCollectionExtensions
         services.AddHttpClient<IIsacClient, IsacHttpClient>();
         return services;
     }
+
+    public static IServiceCollection AddIsacClient(this IServiceCollection services, Action<IsacApiOptions> configure)
+    {
+        var opts = new IsacApiOptions();
+        configure(opts);
+        services.AddSingleton(opts);
+        services.AddHttpClient<IIsacClient, IsacHttpClient>();
+        return services;
+    }
 }

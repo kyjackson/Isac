@@ -3,12 +3,24 @@
     x:Class="Isac.Mobile.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:Isac.Mobile"
+    xmlns:pages="clr-namespace:Isac.Mobile.Pages"
     Title="Isac.Mobile">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <TabBar>
+        <ShellContent
+            Title="Home"
+            ContentTemplate="{DataTemplate pages:HomePage}"
+            Route="Home" />
+
+        <ShellContent
+            Title="Enroll"
+            ContentTemplate="{DataTemplate pages:EnrollmentPage}"
+            Route="Enrollment" />
+
+        <ShellContent
+            Title="Settings"
+            ContentTemplate="{DataTemplate pages:SettingsPage}"
+            Route="Settings" />
+    </TabBar>
 
 </Shell>

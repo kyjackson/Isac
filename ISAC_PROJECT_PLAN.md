@@ -164,13 +164,13 @@ Status:
 
 ## 5. Isac.Mobile
 
-(MVP not yet implemented beyond template)
+(MVP implemented to basic level)
 
 ### Required Features (MVP) Status
-- [ ] Shell navigation (Home / Status, Enrollment, Settings).
-- [ ] Integrate `IsacHttpClient` (not wired yet).
-- [ ] Test Connection button (Ping).
-- [ ] Voice enrollment UI & upload flow.
+- [x] Shell navigation (Home / Status, Enrollment, Settings).
+- [x] Integrate `IsacHttpClient` (basic usage in pages; runtime BaseUrl from Settings/Home).
+- [x] Test Connection button (Ping) on Home.
+- [x] Voice enrollment UI & upload flow (basic via FilePicker; recording to be added later).
 
 ---
 
@@ -196,7 +196,7 @@ Status:
 3. Watch Face (Isac.Watchface)
    - [ ] Not started.
 4. Mobile App (Isac.Mobile)
-   - [ ] Not started (beyond template scaffolding).
+   - [x] Implemented Shell, Home (Ping), Settings (BaseUrl), and Enrollment (basic file-based flow). Recording UI pending.
 5. Iterative Enhancements
    - [ ] Not started.
 

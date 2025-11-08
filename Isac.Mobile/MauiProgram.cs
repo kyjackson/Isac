@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Isac.Mobile.Pages;
 
 namespace Isac.Mobile
 {
@@ -14,6 +15,11 @@ namespace Isac.Mobile
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
+
+            // Register pages (DI)
+            builder.Services.AddTransient<HomePage>();
+            builder.Services.AddTransient<EnrollmentPage>();
+            builder.Services.AddTransient<SettingsPage>();
 
 #if DEBUG
     		builder.Logging.AddDebug();
