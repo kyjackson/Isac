@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<FlyoutPage
+    x:Class="Isac.Mobile.Pages.MainFlyoutPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Isac.Mobile.Pages">
+    
+    <FlyoutPage.Flyout>
+        <ContentPage Title="Menu" Padding="20" BackgroundColor="#202124">
+            <ContentPage.Resources>
+                <Style TargetType="Grid" x:Key="NavButton">
+                    <Setter Property="Padding" Value="12,16"/>
+                    <Setter Property="ColumnSpacing" Value="20"/>
+                </Style>
+                <Style TargetType="Label" x:Key="NavLabel">
+                    <Setter Property="TextColor" Value="White"/>
+                    <Setter Property="FontSize" Value="16"/>
+                    <Setter Property="VerticalOptions" Value="Center"/>
+                </Style>
+                <Style TargetType="Image" x:Key="NavIcon">
+                    <Setter Property="WidthRequest" Value="24"/>
+                    <Setter Property="HeightRequest" Value="24"/>
+                    <Setter Property="Color" Value="White"/>
+                </Style>
+            </ContentPage.Resources>
+            
+            <ScrollView>
+                <VerticalStackLayout Spacing="8">
+                    <!-- Home Button -->
+                    <Border x:Name="HomeButton" StrokeThickness="0" Padding="0" BackgroundColor="Transparent">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="0,24,24,0" />
+                        </Border.StrokeShape>
+                        <Grid Style="{StaticResource NavButton}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Image Source="home_icon.svg" Style="{StaticResource NavIcon}" Grid.Column="0" />
+                            <Label Text="Home" Style="{StaticResource NavLabel}" Grid.Column="1" />
+                        </Grid>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnHomeClicked" />
+                        </Border.GestureRecognizers>
+                    </Border>
+
+                    <!-- Enroll Button -->
+                    <Border x:Name="EnrollButton" StrokeThickness="0" Padding="0" BackgroundColor="Transparent">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="0,24,24,0" />
+                        </Border.StrokeShape>
+                        <Grid Style="{StaticResource NavButton}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Image Source="enroll_icon.svg" Style="{StaticResource NavIcon}" Grid.Column="0" />
+                            <Label Text="Enroll" Style="{StaticResource NavLabel}" Grid.Column="1" />
+                        </Grid>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnEnrollClicked" />
+                        </Border.GestureRecognizers>
+                    </Border>
+
+                    <!-- Settings Button -->
+                    <Border x:Name="SettingsButton" StrokeThickness="0" Padding="0" BackgroundColor="Transparent">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="0,24,24,0" />
+                        </Border.StrokeShape>
+                        <Grid Style="{StaticResource NavButton}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Image Source="settings_icon.svg" Style="{StaticResource NavIcon}" Grid.Column="0" />
+                            <Label Text="Settings" Style="{StaticResource NavLabel}" Grid.Column="1" />
+                        </Grid>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnSettingsClicked" />
+                        </Border.GestureRecognizers>
+                    </Border>
+                </VerticalStackLayout>
+            </ScrollView>
+        </ContentPage>
+    </FlyoutPage.Flyout>
+
+    <FlyoutPage.Detail>
+        <NavigationPage>
+            <x:Arguments>
+                <ContentPage />
+            </x:Arguments>
+        </NavigationPage>
+    </FlyoutPage.Detail>
+</FlyoutPage>

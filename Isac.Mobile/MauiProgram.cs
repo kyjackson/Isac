@@ -19,6 +19,7 @@ namespace Isac.Mobile
                 });
 
             // Register pages (DI)
+            builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<HomePage>();
             builder.Services.AddTransient<EnrollmentPage>();
             builder.Services.AddTransient<SettingsPage>();

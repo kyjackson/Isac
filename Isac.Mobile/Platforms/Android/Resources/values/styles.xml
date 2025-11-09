@@ -8,12 +8,21 @@
 	</style>
 
 	<!-- Main app theme must be Material-based -->
-	<style name="Maui.MainTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+	<style name="Maui.MainTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
 		<item name="colorPrimary">@color/colorPrimary</item>
 		<item name="colorPrimaryDark">@color/colorPrimaryDark</item>
 		<item name="colorAccent">@color/colorAccent</item>
-		<item name="android:statusBarColor">@android:color/transparent</item>
-		<item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+		
+		<!-- Set status bar to transparent and icons to dark -->
+		<!-- <item name="android:statusBarColor">@android:color/transparent</item> -->
+		<item name="android:windowLightStatusBar">false</item>
+		<!-- <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item> -->
+
+		<!-- Set a default window background -->
+		<item name="android:windowBackground">@android:color/black</item>
+
+		<!-- Style for the hamburger icon -->
+		<item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
 		
 		<!-- Add Material TextAppearance attributes -->
 		<item name="textAppearanceHeadline1">@style/TextAppearance.MaterialComponents.Headline1</item>
@@ -29,5 +38,14 @@
 		<item name="textAppearanceCaption">@style/TextAppearance.MaterialComponents.Caption</item>
 		<item name="textAppearanceButton">@style/TextAppearance.MaterialComponents.Button</item>
 		<item name="textAppearanceOverline">@style/TextAppearance.MaterialComponents.Overline</item>
+		
+		<!-- BottomNavigationView specific attributes -->
+		<item name="bottomNavigationStyle">@style/Widget.MaterialComponents.BottomNavigationView</item>
+		<item name="textAppearanceLabelLarge">@style/TextAppearance.MaterialComponents.Caption</item>
+	</style>
+
+	<!-- Custom style for the hamburger/drawer icon -->
+	<style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+		<item name="color">@android:color/black</item>
 	</style>
 </resources>

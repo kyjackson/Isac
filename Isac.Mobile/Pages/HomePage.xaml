@@ -1,12 +1,88 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Isac.Mobile.Pages.HomePage"
-             Title="ISAC Home">
-    <VerticalStackLayout Padding="24" Spacing="16">
-        <Label Text="ISAC Companion" FontSize="24"/>
-        <Entry x:Name="BaseUrlEntry" Placeholder="API Base URL (https://...)" />
-        <Button Text="Test Connection" Clicked="OnTestConnection" />
-        <Label x:Name="ResultLabel" TextColor="Gray"/>
-    </VerticalStackLayout>
+             BackgroundColor="Black">
+
+    <Grid>
+        <!-- Outer Glow Effect -->
+        <Border x:Name="GlowEffect"
+                WidthRequest="260"
+                HeightRequest="260"
+                StrokeThickness="0"
+                Opacity="0"
+                VerticalOptions="Center"
+                HorizontalOptions="Center">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="130" />
+            </Border.StrokeShape>
+            <Border.Background>
+                <RadialGradientBrush>
+                    <GradientStop Color="#FF8C00" Offset="0.8" />
+                    <GradientStop Color="Transparent" Offset="1.0" />
+                </RadialGradientBrush>
+            </Border.Background>
+        </Border>
+
+        <!-- Main Button -->
+        <Grid x:Name="RecordButton"
+              WidthRequest="250"
+              HeightRequest="250"
+              VerticalOptions="Center"
+              HorizontalOptions="Center">
+
+            <!-- Outer Ring -->
+            <Border StrokeThickness="12">
+                <Border.Stroke>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#FF6600" Offset="0.0" />
+                        <GradientStop Color="#FFA500" Offset="0.5" />
+                        <GradientStop Color="#FF4500" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Border.Stroke>
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="125" />
+                </Border.StrokeShape>
+            </Border>
+
+            <!-- Inner Content -->
+            <Grid>
+                <!-- Inner Circle -->
+                <Border BackgroundColor="Black"
+                        WidthRequest="220"
+                        HeightRequest="220"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="110" />
+                    </Border.StrokeShape>
+                </Border>
+
+                <!-- Decorative Ticks (Simplified) -->
+                <Grid>
+                    <Path Stroke="#FFA500" Aspect="Uniform" StrokeThickness="2"
+                          Data="M 100,10 A 90,90 0 1 1 99.9,10" 
+                          Rotation="15"
+                          WidthRequest="190" HeightRequest="190"
+                          VerticalOptions="Center" HorizontalOptions="Center"
+                          StrokeDashArray="1, 9" StrokeDashOffset="2" />
+                    <Path Stroke="#FFA500" Aspect="Uniform" StrokeThickness="1"
+                          Data="M 100,10 A 90,90 0 1 1 99.9,10" 
+                          Rotation="125"
+                          WidthRequest="160" HeightRequest="160"
+                          VerticalOptions="Center" HorizontalOptions="Center"
+                          StrokeDashArray="1, 20" StrokeDashOffset="5" />
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <!-- Status Label -->
+        <Label x:Name="StatusLabel"
+               Text="Ready"
+               TextColor="White"
+               FontSize="16"
+               VerticalOptions="Center"
+               HorizontalOptions="Center"
+               Margin="0,350,0,0" />
+    </Grid>
 </ContentPage>
