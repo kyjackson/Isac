@@ -17,9 +17,12 @@ public class CartesiaTTSClient : ICartesiaTTSClient
     {
         _httpClient = httpClient;
         _options = options;
-        _httpClient.BaseAddress = new Uri(BaseUrl);
-        _httpClient.DefaultRequestHeaders.Add("X-API-Key", _options.ApiKey);
-        _httpClient.DefaultRequestHeaders.Add("Cartesia-Version", "2024-06-10");
+        // BaseAddress and Cartesia-Version are already set by CloudApiExtensions
+        // Only need to add the API key here if not already set
+        if (!_httpClient.DefaultRequestHeaders.Contains("X-API-Key"))
+        {
+            _httpClient.DefaultRequestHeaders.Add("X-API-Key", _options.ApiKey);
+        }
     }
 
     public async Task<byte[]> SynthesizeSpeechAsync(string text, string voiceId, CancellationToken ct = default)
@@ -42,6 +45,15 @@ public class CartesiaTTSClient : ICartesiaTTSClient
         };
 
         var response = await _httpClient.PostAsJsonAsync("/tts/bytes", request, ct);
+        
+        if (!response.IsSuccessStatusCode)
+        {
+            var errorBody = await response.Content.ReadAsStringAsync(ct);
+            System.Diagnostics.Debug.WriteLine($"[CartesiaTTS] Error {response.StatusCode}: {errorBody}");
+            System.Diagnostics.Debug.WriteLine($"[CartesiaTTS] VoiceId: {voiceId}, Text: {text}");
+            throw new HttpRequestException($"Cartesia TTS failed ({response.StatusCode}): {errorBody}");
+        }
+        
         response.EnsureSuccessStatusCode();
 
         return await response.Content.ReadAsByteArrayAsync(ct);

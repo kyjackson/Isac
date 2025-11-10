@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/Solution Items/">
+    <File Path=".env" />
     <File Path="ISAC_PROJECT_PLAN.md" />
   </Folder>
   <Project Path="Isac.Core.Api/Isac.Core.Api.csproj" />

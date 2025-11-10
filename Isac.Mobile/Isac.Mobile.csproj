@@ -54,6 +54,9 @@
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+		
+		<!-- Embed .env file as an embedded resource -->
+		<EmbeddedResource Include=".env" LogicalName=".env" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -86,9 +89,8 @@
 	  </MauiXaml>
 	</ItemGroup>
 
-	<Target Name="CleanObjFolder" BeforeTargets="Build" Condition="'$(Configuration)' == 'Debug' AND '$(TargetFramework)' == 'net10.0-android'">
-	    <!--<RemoveDir Directories="$(BaseIntermediateOutputPath)" />-->
-	    <!--<RemoveDir Directories="obj\Debug\net10.0-android\android\assets" />-->
-	</Target>
+	<ItemGroup>
+	  <Folder Include="Views\" />
+	</ItemGroup>
 
 </Project>
