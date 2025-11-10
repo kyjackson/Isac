@@ -7,16 +7,18 @@ namespace Isac.Mobile.Pages;
 
 public partial class HomePage : ContentPage
 {
-    private readonly IRealtimeClient _realtimeClient;
-    private readonly ICartesiaTTSClient _cartesiaClient;
+    private IRealtimeClient? _realtimeClient;
+    private ICartesiaTTSClient? _cartesiaClient;
     private bool _isRecording = false;
     private MemoryStream? _audioBuffer;
 
-    public HomePage(IRealtimeClient realtimeClient, ICartesiaTTSClient cartesiaClient)
+    public HomePage()
     {
         InitializeComponent();
-        _realtimeClient = realtimeClient;
-        _cartesiaClient = cartesiaClient;
+        
+        // Get services from dependency injection
+        _realtimeClient = Application.Current?.Handler?.MauiContext?.Services?.GetService<IRealtimeClient>();
+        _cartesiaClient = Application.Current?.Handler?.MauiContext?.Services?.GetService<ICartesiaTTSClient>();
 
         // Wire up button press/release events
         var pressGesture = new PointerGestureRecognizer();
@@ -61,6 +63,13 @@ public partial class HomePage : ContentPage
             
             // Stop glow animation
             await AnimateGlow(false);
+
+            // Check if services are available
+            if (_realtimeClient == null || _cartesiaClient == null)
+            {
+                StatusLabel.Text = "Services not configured";
+                return;
+            }
 
             // For MVP: simulate audio data (replace with actual recorded audio)
             var audioData = new byte[16000 * 2]; // 1 second of silence at 16kHz PCM16

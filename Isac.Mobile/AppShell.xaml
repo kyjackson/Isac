@@ -4,18 +4,59 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:Isac.Mobile.Pages"
-    Shell.FlyoutBehavior="Disabled">
+    Shell.FlyoutBehavior="Flyout"
+    Shell.FlyoutBackgroundColor="#000000"
+    Shell.BackgroundColor="#000000"
+    Shell.ForegroundColor="White"
+    Shell.TitleColor="White"
+    Shell.NavBarIsVisible="True">
 
-    <TabBar>
-        <Tab Title="Home" Icon="home_icon.png">
-            <ShellContent ContentTemplate="{DataTemplate local:HomePage}" />
-        </Tab>
-        <Tab Title="Enroll" Icon="enroll_icon.png">
-            <ShellContent ContentTemplate="{DataTemplate local:EnrollmentPage}" />
-        </Tab>
-        <Tab Title="Settings" Icon="settings_icon.png">
-            <ShellContent ContentTemplate="{DataTemplate local:SettingsPage}" />
-        </Tab>
-    </TabBar>
+    <Shell.Resources>
+        <ResourceDictionary>
+            <!-- Force all shell chrome to be black -->
+            <Style TargetType="Shell" ApplyToDerivedTypes="True">
+                <Setter Property="Shell.BackgroundColor" Value="#000000"/>
+                <Setter Property="Shell.ForegroundColor" Value="White"/>
+                <Setter Property="Shell.TitleColor" Value="White"/>
+                <Setter Property="Shell.NavBarHasShadow" Value="False"/>
+                <Setter Property="Shell.DisabledColor" Value="#808080"/>
+                <Setter Property="Shell.UnselectedColor" Value="#808080"/>
+                <Setter Property="Shell.FlyoutBackdrop" Value="#000000"/>
+            </Style>
+            
+            <!-- Style for the flyout icon (hamburger menu) -->
+            <Style TargetType="FlyoutItem">
+                <Setter Property="Shell.BackgroundColor" Value="#000000"/>
+                <Setter Property="Shell.ForegroundColor" Value="White"/>
+            </Style>
+        </ResourceDictionary>
+    </Shell.Resources>
+
+    <!-- Flyout Header -->
+    <Shell.FlyoutHeaderTemplate>
+        <DataTemplate>
+            <Grid HeightRequest="100" BackgroundColor="#000000">
+                <Label Text="ISAC" 
+                       TextColor="White"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"/>
+            </Grid>
+        </DataTemplate>
+    </Shell.FlyoutHeaderTemplate>
+
+    <!-- Flyout Items - using ContentTemplate with parameterless constructor workaround -->
+    <FlyoutItem Title="Home" Icon="home_icon_white.png">
+        <ShellContent Route="HomePage" ContentTemplate="{DataTemplate local:HomePage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Voice Settings" Icon="voice_icon_white.png">
+        <ShellContent Route="VoiceSettingsPage" ContentTemplate="{DataTemplate local:VoiceSettingsPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="AI Settings" Icon="settings_icon_white.png">
+        <ShellContent Route="AISettingsPage" ContentTemplate="{DataTemplate local:AISettingsPage}" />
+    </FlyoutItem>
 
 </Shell>

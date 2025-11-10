@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Isac.Mobile.Pages.AISettingsPage"
+             Title="AI Settings"
+             BackgroundColor="Black">
+    
+    <ScrollView Padding="20">
+        <VerticalStackLayout Spacing="20">
+            
+            <Label Text="AI Settings" 
+                   FontSize="24" 
+                   TextColor="White"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   Margin="0,20,0,10"/>
+
+            <Label Text="Configure your OpenAI settings below:" 
+                   TextColor="#CCCCCC"
+                   FontSize="14"
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,20"/>
+
+            <!-- OpenAI API Key -->
+            <VerticalStackLayout Spacing="8">
+                <Label Text="OpenAI API Key" 
+                       TextColor="White"
+                       FontSize="16"/>
+                <Entry x:Name="OpenAIApiKeyEntry" 
+                       Placeholder="Enter your OpenAI API key"
+                       PlaceholderColor="#808080"
+                       TextColor="White"
+                       BackgroundColor="#1A1A1A"
+                       IsPassword="True"/>
+            </VerticalStackLayout>
+
+            <!-- Save Button -->
+            <Button x:Name="SaveAISettingsButton" 
+                    Text="Save AI Settings"
+                    BackgroundColor="#FF6600"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="8"
+                    HeightRequest="50"
+                    Margin="0,20,0,0"
+                    Clicked="OnSaveAISettingsClicked"/>
+
+            <!-- Help Text -->
+            <Label Text="You can get your API key from platform.openai.com" 
+                   TextColor="#808080"
+                   FontSize="12"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"
+                   Margin="0,10,0,0"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

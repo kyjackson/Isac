@@ -1,51 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<!-- Splash shows first, then switches to Maui.MainTheme -->
-	<style name="Maui.SplashTheme" parent="Theme.SplashScreen">
-		<item name="windowSplashScreenAnimatedIcon">@mipmap/appicon</item>
-		<item name="android:windowSplashScreenBackground">@color/colorPrimary</item>
-		<item name="postSplashScreenTheme">@style/Maui.MainTheme</item>
-	</style>
-
-	<!-- Main app theme must be Material-based -->
-	<style name="Maui.MainTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-		<item name="colorPrimary">@color/colorPrimary</item>
-		<item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-		<item name="colorAccent">@color/colorAccent</item>
-		
-		<!-- Set status bar to transparent and icons to dark -->
-		<!-- <item name="android:statusBarColor">@android:color/transparent</item> -->
-		<item name="android:windowLightStatusBar">false</item>
-		<!-- <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item> -->
-
-		<!-- Set a default window background -->
+	<style name="Maui.SplashTheme" parent="Theme.MaterialComponents.NoActionBar">
 		<item name="android:windowBackground">@android:color/black</item>
-
-		<!-- Style for the hamburger icon -->
-		<item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
-		
-		<!-- Add Material TextAppearance attributes -->
-		<item name="textAppearanceHeadline1">@style/TextAppearance.MaterialComponents.Headline1</item>
-		<item name="textAppearanceHeadline2">@style/TextAppearance.MaterialComponents.Headline2</item>
-		<item name="textAppearanceHeadline3">@style/TextAppearance.MaterialComponents.Headline3</item>
-		<item name="textAppearanceHeadline4">@style/TextAppearance.MaterialComponents.Headline4</item>
-		<item name="textAppearanceHeadline5">@style/TextAppearance.MaterialComponents.Headline5</item>
-		<item name="textAppearanceHeadline6">@style/TextAppearance.MaterialComponents.Headline6</item>
-		<item name="textAppearanceSubtitle1">@style/TextAppearance.MaterialComponents.Subtitle1</item>
-		<item name="textAppearanceSubtitle2">@style/TextAppearance.MaterialComponents.Subtitle2</item>
-		<item name="textAppearanceBody1">@style/TextAppearance.MaterialComponents.Body1</item>
-		<item name="textAppearanceBody2">@style/TextAppearance.MaterialComponents.Body2</item>
-		<item name="textAppearanceCaption">@style/TextAppearance.MaterialComponents.Caption</item>
-		<item name="textAppearanceButton">@style/TextAppearance.MaterialComponents.Button</item>
-		<item name="textAppearanceOverline">@style/TextAppearance.MaterialComponents.Overline</item>
-		
-		<!-- BottomNavigationView specific attributes -->
-		<item name="bottomNavigationStyle">@style/Widget.MaterialComponents.BottomNavigationView</item>
-		<item name="textAppearanceLabelLarge">@style/TextAppearance.MaterialComponents.Caption</item>
+		<item name="android:windowSplashScreenBackground">@android:color/black</item>
+		<item name="android:windowLightStatusBar">false</item>
+		<item name="android:statusBarColor">@android:color/black</item>
+		<item name="android:navigationBarColor">@android:color/black</item>
 	</style>
-
-	<!-- Custom style for the hamburger/drawer icon -->
+	
+	<!-- Main app theme must be Material-based -->
+	<style name="Maui.MainTheme" parent="Theme.MaterialComponents.NoActionBar">
+		<item name="android:windowLightStatusBar">false</item>
+		<item name="android:statusBarColor">@android:color/black</item>
+		<item name="android:navigationBarColor">@android:color/black</item>
+		<item name="android:windowBackground">@android:color/black</item>
+		<item name="colorPrimary">@android:color/black</item>
+		<item name="colorPrimaryVariant">@android:color/black</item>
+		<item name="colorOnPrimary">@android:color/white</item>
+		<item name="android:textColorPrimary">@android:color/white</item>
+		<item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+	</style>
+	
+	<!-- Custom style for the hamburger icon -->
 	<style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
-		<item name="color">@android:color/black</item>
+		<item name="color">@android:color/white</item>
 	</style>
 </resources>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Isac.Mobile.Pages.VoiceSettingsPage"
+             Title="Voice Settings"
+             BackgroundColor="Black">
+    
+    <ScrollView Padding="20">
+        <VerticalStackLayout Spacing="20">
+            
+            <Label Text="Voice Settings" 
+                   FontSize="24" 
+                   TextColor="White"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   Margin="0,20,0,10"/>
+
+            <Label Text="Configure your Cartesia voice settings below:" 
+                   TextColor="#CCCCCC"
+                   FontSize="14"
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,20"/>
+
+            <!-- Cartesia API Key -->
+            <VerticalStackLayout Spacing="8">
+                <Label Text="Cartesia API Key" 
+                       TextColor="White"
+                       FontSize="16"/>
+                <Entry x:Name="CartesiaApiKeyEntry" 
+                       Placeholder="Enter your Cartesia API key"
+                       PlaceholderColor="#808080"
+                       TextColor="White"
+                       BackgroundColor="#1A1A1A"
+                       IsPassword="True"/>
+            </VerticalStackLayout>
+
+            <!-- Voice ID -->
+            <VerticalStackLayout Spacing="8">
+                <Label Text="Voice ID" 
+                       TextColor="White"
+                       FontSize="16"/>
+                <Entry x:Name="VoiceIdEntry" 
+                       Placeholder="Enter your Voice ID"
+                       PlaceholderColor="#808080"
+                       TextColor="White"
+                       BackgroundColor="#1A1A1A"/>
+            </VerticalStackLayout>
+
+            <!-- Save Button -->
+            <Button x:Name="SaveVoiceSettingsButton" 
+                    Text="Save Voice Settings"
+                    BackgroundColor="#FF6600"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="8"
+                    HeightRequest="50"
+                    Margin="0,20,0,0"
+                    Clicked="OnSaveVoiceSettingsClicked"/>
+
+            <!-- Help Text -->
+            <Label Text="You can get your API key and Voice ID from your Cartesia dashboard." 
+                   TextColor="#808080"
+                   FontSize="12"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"
+                   Margin="0,10,0,0"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

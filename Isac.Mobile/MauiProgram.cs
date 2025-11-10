@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Isac.Mobile.Pages;
-using Isac.Mobile.Services;
-using Isac.Core.Shared.Client;
+using Microsoft.Extensions.DependencyInjection;
+using Isac.Core.Shared.Client; // Add this if IRealtimeClient exists
 
 namespace Isac.Mobile
 {
@@ -18,35 +18,24 @@ namespace Isac.Mobile
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-            // Register pages (DI)
-            builder.Services.AddTransient<MainPage>();
+            // Register pages
             builder.Services.AddTransient<HomePage>();
-            builder.Services.AddTransient<EnrollmentPage>();
-            builder.Services.AddTransient<SettingsPage>();
-
-            // Register OpenAI Realtime client
-            builder.Services.AddOpenAIRealtimeClient(options =>
-            {
-                options.ApiKey = Preferences.Get("OpenAI:ApiKey", string.Empty);
-                options.Model = "gpt-4o-mini-realtime-preview";
-                options.Voice = "alloy";
-            });
-            builder.Services.AddSingleton<IRealtimeClient, OpenAIRealtimeClient>();
-
-            // Register Cartesia TTS client
-            builder.Services.AddCartesiaTTSClient(options =>
-            {
-                options.ApiKey = Preferences.Get("Cartesia:ApiKey", string.Empty);
-                options.VoiceId = Preferences.Get("Cartesia:VoiceId", string.Empty);
-                options.Model = "sonic-english";
-            });
-            builder.Services.AddHttpClient<ICartesiaTTSClient, CartesiaTTSClient>();
+            builder.Services.AddTransient<VoiceSettingsPage>();
+            builder.Services.AddTransient<AISettingsPage>();
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
-            return builder.Build();
-        }
+			// Register routes (add this after the app is built, before return)
+			var app = builder.Build();
+
+			// Register Shell routes
+			Routing.RegisterRoute("HomePage",          typeof(HomePage));
+			Routing.RegisterRoute("VoiceSettingsPage", typeof(VoiceSettingsPage));
+			Routing.RegisterRoute("AISettingsPage",    typeof(AISettingsPage));
+
+			return app;
+		}
     }
 }
